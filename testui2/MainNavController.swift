@@ -37,9 +37,3 @@ class MainNavController: UINavigationController {
         
     }
 }
-class HomeController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .yellow
-    }
-}
