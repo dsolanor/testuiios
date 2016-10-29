@@ -16,11 +16,11 @@ class RoundCell: UICollectionViewCell{
     }
     
     
-    var round: Round? {
-        didSet{
-            titleLabel.text = round?.title
-        }
-    }
+//    var round: Round? {
+//        didSet{
+//            titleLabel.text = round?.title
+//        }
+//    }
     
     
     let thumbnailImageView:UIImageView = {
@@ -40,11 +40,9 @@ class RoundCell: UICollectionViewCell{
         addSubview(thumbnailImageView)
         addSubview(titleLabel)
         
-        addConstraintsWithFormat("H:|-16-[v0]-16-|", views: thumbnailImageView )
-        
-        addConstraintsWithFormat("H:|-16-[v0]-16-|", views: titleLabel)
-        
-        addConstraintsWithFormat("V:|-16-[v0]-6-[v1(44)]|", views: thumbnailImageView,titleLabel )
+//        addConstraintsWithFormat("H:|-16-[v0]-16-|", views: thumbnailImageView )
+//        addConstraintsWithFormat("H:|-16-[v0]-16-|", views: titleLabel)
+//        addConstraintsWithFormat("V:|-16-[v0]-6-[v1(44)]|", views: thumbnailImageView,titleLabel )
         
         
     }
@@ -54,14 +52,14 @@ class RoundCell: UICollectionViewCell{
     }
 }
 
-extension UIView{
-    func addConstraintsWithFormat(_ format:String, views:UIView...){
-        var viewsDictionary = [String:UIView]()
-        for (index, view) in views.enumerated(){
-            let key = "v\(index)"
-            view.translatesAutoresizingMaskIntoConstraints = false
-            viewsDictionary[key] = view
-        }
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
-    }
-}
+//extension UIView{
+//    func addConstraintsWithFormat(_ format:String, views:UIView...){
+//        var viewsDictionary = [String:UIView]()
+//        for (index, view) in views.enumerated(){
+//            let key = "v\(index)"
+//            view.translatesAutoresizingMaskIntoConstraints = false
+//            viewsDictionary[key] = view
+//        }
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
+//    }
+//}

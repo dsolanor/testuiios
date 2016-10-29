@@ -131,14 +131,14 @@ class LoginScreen: UIViewController {
     }
     func handleLogin(){
         print("Login")
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        guard let mainNavController = rootViewController as? MainNavController else { return }
-        mainNavController.viewControllers = [HomeController()]
-        dismiss(animated: true, completion: nil)
-        guard let email = emailTextField.text, let password = passwordTextField.text else{
-            print("Form not valid")
-            return
-        }
+//        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+//        guard let mainNavController = rootViewController as? MainNavController else { return }
+//        mainNavController.viewControllers = [HomeController()]
+//        dismiss(animated: true, completion: nil)
+//        guard let email = emailTextField.text, let password = passwordTextField.text else{
+//            print("Form not valid")
+//            return
+//        }
 
     }
     
