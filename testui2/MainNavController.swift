@@ -19,8 +19,6 @@ class MainNavController: UINavigationController {
         if isLoggedIn() {
             // User is logged in
             let homeController = HomeController()
-//            let feedLayout = UICollectionViewFlowLayout()
-//            let feedController = FeedController(collectionViewLayout: feedLayout)
             viewControllers = [homeController]
         }else{
             // User is not logged
@@ -28,7 +26,7 @@ class MainNavController: UINavigationController {
         }
     }
     fileprivate func isLoggedIn() -> Bool {
-        return true
+        return UserDefaults.standard.bool(forKey: "isLoggedIn")
     }
     func showLoginController(){
         let loginController = LoginScreen()

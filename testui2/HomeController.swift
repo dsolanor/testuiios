@@ -18,6 +18,10 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         
         self.myRounds = [Round]()
         
+        navigationItem.title = "Home"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Sign out", style: .plain, target: self, action: #selector(handleLogout))
+        
+        
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let myCollectionView:UICollectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         myCollectionView.dataSource = self
@@ -25,7 +29,20 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         myCollectionView.register(rCell.self, forCellWithReuseIdentifier: "MyCell")
         myCollectionView.backgroundColor = .white
         view.addSubview(myCollectionView)
+        
+        
+        
+//        let retrievedToken: String? = KeychainWrapper.standard.string(forKey: "token")
+        
 
+        let UDToken = UserDefaults.standard.string(forKey: "UDToken")
+        let alertError: UIAlertController = {
+            let alert = UIAlertController()
+            alert.title = "Error"
+            alert.message = "error message"
+            return alert
+        }()
+        
         
         Alamofire.request("https://randomuser.me/api/?results=5").responseJSON { response in
             switch response.result {
@@ -36,8 +53,14 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
                 if let items = json["results"].array {
                     for item in items {
                         let round = Round()
-                        if let title = item["name"]["first"].string {
-                            round.title = title
+                        if var title = item["name"]["first"].string {
+                            title = title.capitalized
+                            round.title = "Uploaded by \(title)"
+                        }
+                        if let imageURL = item["picture"]["medium"].string {
+                            let imageURLtoString = NSURL(string: imageURL)
+                            let imageData = NSData(contentsOf: imageURLtoString as! URL)
+                            round.profileImage = UIImage(data: imageData as! Data)
                         }
                         
                         //            self.myRounds?.append(round)
@@ -51,46 +74,15 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
             }
         }
     }
-    class rCell: UICollectionViewCell{
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            setupViews()
-            print("cell")
-        }
-        var round: Round? {
-            didSet{
-                titleLabel.text = round?.title
-            }
-        }
+    func handleLogout(){
+        UserDefaults.standard.set(false, forKey: "isLoggedIn")
+        UserDefaults.standard.synchronize()
         
-        let thumbnailImageView:UIImageView = {
-            let imageView = UIImageView()
-            imageView.backgroundColor = UIColor.gray
-            return imageView
-        }()
-        let titleLabel:UILabel = {
-            let label = UILabel()
-            label.text = "test Title"
-            return label
-        }()
-        
-        func setupViews(){
-            addSubview(thumbnailImageView)
-            addSubview(titleLabel)
-            
-            addConstraintsWithFormat("H:|-16-[v0]-16-|", views: thumbnailImageView )
-            addConstraintsWithFormat("H:|-16-[v0]-16-|", views: titleLabel)
-            addConstraintsWithFormat("V:|-16-[v0]-6-[v1(44)]|", views: thumbnailImageView,titleLabel )
-            
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+        let loginController = LoginScreen()
+        present(loginController, animated: true, completion: nil)
     }
-        
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return myRounds?.count ?? 5;
+        return myRounds?.count ?? 0;
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -103,7 +95,6 @@ class HomeController: UIViewController, UICollectionViewDataSource, UICollection
         return CGSize(width: view.frame.width, height: 300)
     }
 }
-
 extension UIView{
     func addConstraintsWithFormat(_ format:String, views:UIView...){
         var viewsDictionary = [String:UIView]()
@@ -115,38 +106,3 @@ extension UIView{
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
 }
-
-
-
-
-
-
-//class FeedController: UICollectionViewController {
-//
-//    var myRounds: [Round]?
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        view.backgroundColor = .red
-//
-//        self.myRounds = [Round]()
-//        let round = Round()
-//        round.title = "test title"
-//        self.myRounds?.insert(round, at: 0)
-//        self.collectionView?.reloadData()
-//    }
-//    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        
-//        return myRounds?.count ?? 0;
-//    }
-//    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! RoundCell
-//        cell.round = myRounds?[(indexPath as NSIndexPath).item]
-//        return cell
-//    }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-//        
-//        return CGSize(width: view.frame.width, height: 300)
-//    }
-//
-//}

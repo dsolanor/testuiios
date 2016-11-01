@@ -10,4 +10,5 @@ import UIKit
 
 class Round: NSObject {
     var title: String?
+    var profileImage: UIImage?
 }

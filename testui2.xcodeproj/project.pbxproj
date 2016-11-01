@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0508D25D1DC764C1004CE68E /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0508D25C1DC764C1004CE68E /* KeychainWrapper.swift */; };
+		0508D25F1DC766A4004CE68E /* KeychainItemAccessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0508D25E1DC766A4004CE68E /* KeychainItemAccessibility.swift */; };
 		051923291DBFEEB7007CAE4F /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 051923281DBFEEB7007CAE4F /* HomeController.swift */; };
 		0519232B1DBFF06B007CAE4F /* RoundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519232A1DBFF06B007CAE4F /* RoundCell.swift */; };
 		0519232F1DBFF0DC007CAE4F /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519232E1DBFF0DC007CAE4F /* Round.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0508D25C1DC764C1004CE68E /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
+		0508D25E1DC766A4004CE68E /* KeychainItemAccessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainItemAccessibility.swift; sourceTree = "<group>"; };
 		051923281DBFEEB7007CAE4F /* HomeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		0519232A1DBFF06B007CAE4F /* RoundCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundCell.swift; sourceTree = "<group>"; };
 		0519232E1DBFF0DC007CAE4F /* Round.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 				054A396E1DBE747D000B382C /* LaunchScreen.storyboard */,
 				054A39711DBE747D000B382C /* Info.plist */,
 				0519232C1DBFF09E007CAE4F /* View */,
+				0508D25C1DC764C1004CE68E /* KeychainWrapper.swift */,
+				0508D25E1DC766A4004CE68E /* KeychainItemAccessibility.swift */,
 			);
 			path = testui2;
 			sourceTree = "<group>";
@@ -242,7 +248,9 @@
 				051923291DBFEEB7007CAE4F /* HomeController.swift in Sources */,
 				054A39681DBE747D000B382C /* MainNavController.swift in Sources */,
 				054A39781DBE7607000B382C /* LoginScreen.swift in Sources */,
+				0508D25D1DC764C1004CE68E /* KeychainWrapper.swift in Sources */,
 				0519232B1DBFF06B007CAE4F /* RoundCell.swift in Sources */,
+				0508D25F1DC766A4004CE68E /* KeychainItemAccessibility.swift in Sources */,
 				0519232F1DBFF0DC007CAE4F /* Round.swift in Sources */,
 				054A39661DBE747D000B382C /* AppDelegate.swift in Sources */,
 			);

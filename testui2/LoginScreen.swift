@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class LoginScreen: UIViewController {
     
@@ -75,19 +77,19 @@ class LoginScreen: UIViewController {
         nameTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
         nameTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive = true
         nameTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
+        nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2).isActive = true
         
         inputsContainerView.addSubview(emailTextField)
         emailTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-        emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
+        emailTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive = true
         emailTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
+        emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2).isActive = true
         
         inputsContainerView.addSubview(passwordTextField)
         passwordTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
         passwordTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
+        passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2).isActive = true
         
         view.addSubview(loginButton)
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -104,13 +106,18 @@ class LoginScreen: UIViewController {
         
         view.backgroundColor = UIColor(red: 0/255, green: 30/255, blue: 70/255, alpha: 1)
         
-        loginRegistrerSegmentedControl.selectedSegmentIndex = 1
+        loginRegistrerSegmentedControl.selectedSegmentIndex = 0
         handleLoginRegisterChange()
     }
     func handleLoginRegisterChange(){
         let title = loginRegistrerSegmentedControl.titleForSegment(at: loginRegistrerSegmentedControl.selectedSegmentIndex)
         loginButton.setTitle(title, for: UIControlState())
         inputsContainerHeight?.constant = loginRegistrerSegmentedControl.selectedSegmentIndex == 0 ? 150 : 250
+        if(loginRegistrerSegmentedControl.selectedSegmentIndex == 0){
+            nameTextField.isHidden = true
+        }else{
+            nameTextField.isHidden = false
+        }
         
         //TODO: Hide name in login state
     }
@@ -131,15 +138,44 @@ class LoginScreen: UIViewController {
     }
     func handleLogin(){
         print("Login")
-//        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-//        guard let mainNavController = rootViewController as? MainNavController else { return }
-//        mainNavController.viewControllers = [HomeController()]
-//        dismiss(animated: true, completion: nil)
-//        guard let email = emailTextField.text, let password = passwordTextField.text else{
-//            print("Form not valid")
-//            return
-//        }
+        guard let email = emailTextField.text, let password = passwordTextField.text else{
+            print("Form not valid")
+            return
+        }
+        doAuth(username: email, password: password as AnyObject)
+    }
+    func doAuth(username:String,password:AnyObject){
+        let params = ["name": username, "password": password] as [String : Any]
+        let authToken = Alamofire.request("http://192.168.1.38:8080/api/authenticate/", method:.post, parameters: params)
+        var token:String = "test"
+        authToken.responseJSON{ response in
+            switch response.result {
+            case .success:
+                let jsonData = JSON(response.result.value!)
+                
+                if(jsonData["success"].bool!){
+                    token = jsonData["token"].string!
+                    do{
+                        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
+                        guard let mainNavController = rootViewController as? MainNavController else { return }
+                        mainNavController.viewControllers = [HomeController()]
+                        self.dismiss(animated: true, completion: nil)
+                        UserDefaults.standard.set(token, forKey: "UDToken")
+                        UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                        UserDefaults.standard.synchronize()
+                    } catch let error {
+                        print(error)
+                    }
+                    print("User token \(token)")
+                }else{
+                    print(jsonData["message"].string!)
+                }
+                
 
+            case .failure(let error):
+                print("Request failed with error: \(error)")
+            }
+        }
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
